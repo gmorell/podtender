@@ -12,6 +12,29 @@ pub struct GetInfoResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct NetDNS {
+    pub package: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct NetworkBackendInfo {
+    pub backend: Option<String>,
+    pub version: Option<String>,
+    pub package: Option<String>,
+    pub path: Option<String>,
+    pub dns: Option<NetDNS>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct Pasta {
+    pub executable: Option<String>,
+    pub version: Option<String>,
+    pub package: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "camelCase")]
 pub struct HostInfo {
@@ -44,6 +67,10 @@ pub struct HostInfo {
     pub swap_free: Option<i64>,
     pub swap_total: Option<i64>,
     pub uptime: Option<String>,
+    pub free_locks: Option<i64>,
+    pub network_backend_info: Option<NetworkBackendInfo>,
+    pub pasta: Option<Pasta>,
+    pub variant: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
@@ -145,7 +172,7 @@ pub struct StoreInfo {
     pub config_file: Option<String>,
     pub container_store: Option<ContainerStore>,
     pub graph_driver_name: Option<String>,
-    pub graph_options: Option<HashMap<String, GraphOptionsEntry>>,
+    pub graph_options: Option<HashMap<String, String>>,
     pub graph_root: Option<String>,
     pub graph_root_allocated: Option<u64>,
     pub graph_root_used: Option<u64>,
@@ -224,4 +251,40 @@ pub struct EventActor {
     pub id: Option<String>,
     #[serde(rename = "Attributes")]
     pub attributes: Option<HashMap<String, String>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DfImage {
+    pub Repository: String,
+    pub Tag: String,
+    pub ImageID: String,
+    pub Created: String,
+    pub Size: u64,
+    pub SharedSize: u64,
+    pub UniqueSize: u64,
+    pub Containers: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DfContainer {
+    pub ContainerID: String,
+    pub Image: String,
+    pub Command: Vec<String>,
+    pub LocalVolumes: u64,
+    pub Size: u64,
+    pub RWSize: u64,
+    pub Created: String,
+    pub Status: String,
+    pub Names: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DfResponse {
+    pub ImagesSize: u64,
+    pub Images: Vec<DfImage>,
+    pub Containers: Vec<DfContainer>,
+    pub Volumes: Vec<String>,
 }
