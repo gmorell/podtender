@@ -60,6 +60,7 @@ pub struct HostInfo {
     pub oci_runtime: Option<OciRuntime>,
     pub os: Option<String>,
     pub remote_socket: Option<RemoteSocket>,
+    pub rootless_network_cmd: Option<String>,
     pub runtime_info: Option<HashMap<String, String>>,
     pub security: Option<SecurityInfo>,
     pub service_is_remote: Option<bool>,
