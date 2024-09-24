@@ -162,6 +162,7 @@ impl TryFrom<ListImagesParameter> for ListImagesParameterQuery {
 #[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
 pub struct PruneImagesParameter {
     pub all: Option<bool>,
+    pub buildcache: Option<bool>,
     pub external: Option<bool>,
     pub filters: Option<HashMap<String, Vec<String>>>,
 }
@@ -176,6 +177,7 @@ impl ExampleValues for PruneImagesParameter {
         );
         Self {
             all: Some(true),
+            buildcache: Some(false),
             external: Some(false),
             filters: Some(filter_map),
         }

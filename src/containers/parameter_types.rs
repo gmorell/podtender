@@ -10,6 +10,36 @@ use serde_with::skip_serializing_none;
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
+pub struct IntelRdt {
+    #[serde(rename = "closID")]
+    pub closid: Option<String>,
+    #[serde(rename = "enableCMT")]
+    pub enable_cmt: Option<bool>,
+    #[serde(rename = "enableMBM")]
+    pub enable_mbm: Option<bool>,
+    #[serde(rename = "l3CacheSchema")]
+    pub l3_cache_schema: Option<String>,
+    #[serde(rename = "memBwSchema")]
+    pub mem_bw_schema: Option<String>,
+}
+
+pub struct StartupHealthConfig {
+    #[serde(rename = "Interval")]
+    pub interval: Option<u64>,
+    #[serde(rename = "Retries")]
+    pub retries: Option<u64>,
+    #[serde(rename = "StartInterval")]
+    pub start_interval: Option<u64>,
+    #[serde(rename = "StartPeriod")]
+    pub start_period: Option<u64>,
+    #[serde(rename = "Sucesses")]
+    pub sucesses: Option<u64>,
+    #[serde(rename = "Test")]
+    pub test: Option<Vec<String>>,
+    #[serde(rename = "Timeout")]
+    pub timeout: Option<u64>,
+}
+
 //json
 #[skip_serializing_none]
 #[cfg_attr(feature = "builder", derive(Builder))]
@@ -18,11 +48,14 @@ use std::convert::TryFrom;
 pub struct CreateContainerParameter {
     pub annotations: Option<HashMap<String, String>>,
     pub apparmor_profile: Option<String>,
+    pub base_hosts_file: Option<String>,
     pub cap_add: Option<String>,
     pub cap_drop: Option<Vec<String>>,
     pub cgroup_parent: Option<String>,
     pub cgroupns: Option<Namespace>,
     pub cgroups_mode: Option<String>,
+    pub chroot_directories: Option<Vec<String>>,
+    pub cni_networks: Option<Vec<String>>,
     pub command: Option<Vec<String>>,
     pub conmon_pid_file: Option<String>,
     #[serde(rename = "containerCreateCommand")]
@@ -41,8 +74,11 @@ pub struct CreateContainerParameter {
     pub entrypoint: Option<Vec<String>>,
     pub env: Option<HashMap<String, String>>,
     pub env_host: Option<bool>,
+    pub envmerge: Option<Vec<String>>,
     pub expose: Option<HashMap<u16, String>>,
+    pub group_entry: Option<Vec<String>>,
     pub groups: Option<Vec<String>>,
+    pub health_check_on_failure_action: Option<u64>,
     pub healthconfig: Option<Schema2HealthConfig>,
     pub host_device_list: Option<Vec<LinuxDevice>>,
     pub hostadd: Option<Vec<String>>,
@@ -51,12 +87,18 @@ pub struct CreateContainerParameter {
     pub httpproxy: Option<bool>,
     pub idmappings: Option<IdMappingOptions>,
     pub image: Option<String>,
+    pub image_arch: Option<String>,
+    pub image_os: Option<String>,
+    pub image_variant: Option<String>,
     pub image_volume_mode: Option<String>,
     pub image_volumes: Option<Vec<ImageVolume>>,
     pub init: Option<bool>,
     pub init_container_type: Option<String>,
     pub init_path: Option<String>,
+    #[serde(rename = "intelRdt")]
+    pub intel_rdt: Option<IntelRdt>,
     pub ipcns: Option<Namespace>,
+    pub label_nested: Option<bool>,
     pub labels: Option<HashMap<String, String>>,
     pub log_configuration: Option<LogConfig>,
     pub manage_password: Option<bool>,
@@ -82,21 +124,28 @@ pub struct CreateContainerParameter {
     pub r_limits: Option<Vec<POSIXRlimit>>,
     pub raw_image_name: Option<String>,
     pub read_only_filesystem: Option<bool>,
+    pub read_write_tmpfs: Option<bool>,
     pub remove: Option<bool>,
+    pub remove_image: Option<bool>,
     pub resource_limits: Option<LinuxResources>,
     pub restart_policy: Option<String>,
     pub restart_tries: Option<u64>,
     pub rootfs: Option<String>,
+    pub rootfs_mapping: Option<String>,
     pub rootfs_overlay: Option<bool>,
     pub rootfs_progagation: Option<String>,
     #[serde(rename = "sdnotifyMode")]
     pub sdnotify_mode: Option<String>,
     pub seccomp_policy: Option<String>,
     pub seccomp_profile_path: Option<String>,
+    pub secret_env: Option<HashMap<String, String>>,
     pub secrets_env: Option<HashMap<String, String>>,
     pub secrets: Option<Vec<Secret>>,
     pub selinux_opts: Option<Vec<String>>,
     pub shm_size: Option<i64>,
+    pub shm_size_systemd: Option<i64>,
+    #[serde(rename = "startupHealthConfig")]
+    pub startup_health_config: Option<StartupHealthConfig>,
     pub stdin: Option<bool>,
     pub stop_signal: Option<i64>,
     pub stop_timeout: Option<u64>,
@@ -195,6 +244,8 @@ pub struct Schema2HealthConfig {
     pub interval: Option<i64>,
     #[serde(rename = "Retries")]
     pub retries: Option<i64>,
+    #[serde(rename = "StartInterval")]
+    pub start_interval: Option<i64>,
     #[serde(rename = "StartPeriod")]
     pub start_period: Option<i64>,
     #[serde(rename = "Test")]
@@ -261,6 +312,8 @@ pub struct ImageVolume {
     pub read_write: Option<bool>,
     #[serde(rename = "Source")]
     pub source: Option<String>,
+    #[serde(rename = "subPath")]
+    pub sub_path: Option<String>,
 }
 
 #[skip_serializing_none]
@@ -281,6 +334,8 @@ pub struct LogConfig {
 pub struct Mount {
     #[serde(rename = "BindOptions")]
     pub bindoptions: Option<BindOptions>,
+    #[serde(rename = "ClusterOptions")]
+    pub cluster_options: Option<String>,
     #[serde(rename = "Consistency")]
     pub consistency: Option<String>,
     #[serde(rename = "ReadOnly")]
@@ -302,10 +357,16 @@ pub struct Mount {
 #[derive(Serialize, Deserialize, Debug, Default, Clone, Eq, PartialEq)]
 #[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
 pub struct BindOptions {
+    #[serde(rename = "CreateMountpoint")]
+    pub create_mountpoint: Option<bool>,
     #[serde(rename = "NonRecursive")]
     pub non_recursive: Option<bool>,
     #[serde(rename = "Propagation")]
     pub propagation: Option<String>,
+    #[serde(rename = "ReadOnlyForceRecursive")]
+    pub read_only_force_recursive: Option<bool>,
+    #[serde(rename = "ReadOnlyNonRecursive")]
+    pub read_only_non_recursive: Option<bool>,
 }
 
 #[skip_serializing_none]
@@ -330,6 +391,8 @@ pub struct VolumeOptions {
     pub labels: Option<HashMap<String, String>>,
     #[serde(rename = "NoCopy")]
     pub no_copy: Option<bool>,
+    #[serde(rename = "SubPath")]
+    pub sub_path: Option<String>,
 }
 
 #[skip_serializing_none]
@@ -350,6 +413,8 @@ pub struct DriverConfig {
 pub struct TmpfsOptions {
     #[serde(rename = "Mode")]
     pub mode: Option<u32>,
+    #[serde(rename = "Options")]
+    pub options: Vec<Vec<String>>,
     #[serde(rename = "SizedBytes")]
     pub sized_bytes: Option<i64>,
 }
@@ -455,7 +520,9 @@ pub struct LinuxWeightDevice {
 #[derive(Serialize, Deserialize, Debug, Default, Clone, Eq, PartialEq)]
 #[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
 pub struct LinuxCPU {
+    pub burst: Option<i64>,
     pub cpus: Option<String>,
+    pub idle: Option<i64>,
     pub mems: Option<String>,
     pub period: Option<u64>,
     pub quote: Option<i64>,
@@ -494,6 +561,8 @@ pub struct LinuxHugepageLimit {
 #[derive(Serialize, Deserialize, Debug, Default, Clone, Eq, PartialEq)]
 #[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
 pub struct LinuxMemory {
+    #[serde(rename = "checkBeforeUpdate")]
+    pub check_before_update: Option<bool>,
     #[serde(rename = "disableOOMKiller")]
     pub disable_oom_killer: Option<bool>,
     pub kernel: Option<i64>,
@@ -718,15 +787,23 @@ pub struct CheckpointContainerParameter {
     #[serde(skip_serializing)]
     pub container_name: String,
     pub export: Option<bool>,
-    #[serde(rename = "IgnoreRootFS")]
+    #[serde(rename = "fileLocks")]
+    pub file_locks: Option<bool>,
+    #[serde(rename = "ignoreRootFS")]
     pub ignore_root_fs: Option<bool>,
+    #[serde(rename= "ignoreVolumes")]
+    pub ignore_volumes: Option<bool>,
     pub keep: Option<bool>,
     #[serde(rename = "leaveRunning")]
     pub leave_running: Option<bool>,
+    #[serde(rename = "preCheckpoint")]
+    pub pre_checkpoint: Option<bool>,
     #[serde(rename = "printStats")]
     pub print_stats: Option<bool>,
     #[serde(rename = "tcpEstablished")]
     pub tcp_established: Option<bool>,
+    #[serde(rename = "withPrevious")]
+    pub with_previous: Option<bool>,
 }
 #[cfg(any(test, feature = "examples"))]
 impl ExampleValues for CheckpointContainerParameter {
@@ -734,11 +811,15 @@ impl ExampleValues for CheckpointContainerParameter {
         Self {
             container_name: String::from("CheckpointContainerParameter"),
             export: Some(true),
+            file_locks: None,
             ignore_root_fs: Some(false),
+            ignore_volumes: None,
             keep: Some(false),
             leave_running: Some(false),
+            pre_checkpoint: None,
             print_stats: Some(false),
             tcp_established: Some(true),
+            with_previous: None,
         }
     }
 }
@@ -927,17 +1008,22 @@ impl ExampleValues for RestartContainerParameter {
 pub struct RestoreContainerParameter {
     #[serde(skip_serializing)]
     pub container_name: String,
+    #[serde(rename = "fileLocks")]
+    pub file_locks: Option<bool>,
     #[serde(rename = "ignoreRootFS")]
     pub ignore_root_fs: Option<bool>,
     #[serde(rename = "ignoreStaticIP")]
     pub ignore_static_ip: Option<bool>,
-    #[serde(rename = "igrnoreStaticMAC")]
+    #[serde(rename = "ignoreStaticMAC")]
     pub ignore_static_mac: Option<bool>,
+    #[serde(rename = "ignoreVolumes")]
+    pub ignore_volumes: Option<bool>,
     pub import: Option<bool>,
     pub keep: Option<bool>,
     #[serde(rename = "leaveRunning")]
     pub leave_running: Option<bool>,
     pub name: Option<String>,
+    pub pod: Option<String>,
     #[serde(rename = "printStats")]
     pub print_stats: Option<bool>,
     #[serde(rename = "tcpEstablished")]
@@ -948,13 +1034,16 @@ impl ExampleValues for RestoreContainerParameter {
     fn example() -> Self {
         Self {
             container_name: String::from("RestoreContainerParameter"),
+            file_locks: None,
             ignore_root_fs: Some(false),
             ignore_static_ip: Some(false),
             ignore_static_mac: Some(false),
+            ignore_volumes: None,
             import: Some(false),
             keep: Some(false),
             leave_running: Some(false),
             name: None,
+            pod: None,
             print_stats: Some(false),
             tcp_established: Some(false),
         }

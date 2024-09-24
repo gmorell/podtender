@@ -20,6 +20,8 @@ pub struct CreateContainerResponse {
 pub struct ListContainersResponseEntry {
     #[serde(rename = "AutoRemove")]
     pub auto_remove: Option<bool>,
+    #[serde(rename = "CIDFile")]
+    pub cid_file: Option<String>,
     #[serde(rename = "Command")]
     pub command: Option<Vec<String>>,
     #[serde(rename = "Created")]
@@ -32,6 +34,8 @@ pub struct ListContainersResponseEntry {
     pub exited: Option<bool>,
     #[serde(rename = "ExitedAt")]
     pub exited_at: Option<i64>,
+    #[serde(rename = "ExposedPorts")]
+    pub exposed_ports: Option<HashMap<String, PortMapping>>,
     #[serde(rename = "Id")]
     pub id: Option<String>,
     #[serde(rename = "Image")]
@@ -58,6 +62,8 @@ pub struct ListContainersResponseEntry {
     pub pod_name: Option<String>,
     #[serde(rename = "Ports")]
     pub ports: Option<Vec<PortMapping>>,
+    #[serde(rename = "Restarts")]
+    pub restarts: Option<i64>,
     #[serde(rename = "Size")]
     pub size: Option<ContainerSize>,
     #[serde(rename = "StartedAt")]
@@ -166,6 +172,10 @@ pub struct InspectContainerResponse {
     pub is_infra: Option<bool>,
     #[serde(rename = "IsService")]
     pub is_service: Option<bool>,
+    #[serde(rename = "KubeExitCodePropagation")]
+    pub kube_exit_code_propagation: Option<String>,
+    #[serde(rename = "lockNumber")]
+    pub lock_number: Option<i64>,
     #[serde(rename = "MountLabel")]
     pub mount_label: Option<String>,
     #[serde(rename = "Mounts")]
@@ -215,6 +225,8 @@ pub struct InspectContainerConfig {
     pub attach_stdin: Option<bool>,
     #[serde(rename = "AttachStdout")]
     pub attach_stdout: Option<bool>,
+    #[serde(rename = "ChrootDirs")]
+    pub chroot_dirs: Option<Vec<String>>,
     #[serde(rename = "Cmd")]
     pub cmd: Option<Vec<String>>,
     #[serde(rename = "CreateCommand")]
@@ -222,7 +234,7 @@ pub struct InspectContainerConfig {
     #[serde(rename = "Domainname")]
     pub domainname: Option<String>,
     #[serde(rename = "Entrypoint")]
-    pub entrypoint: Option<String>,
+    pub entrypoint: Option<Vec<String>>,
     #[serde(rename = "Env")]
     pub env: Option<Vec<String>>,
     #[serde(rename = "Healthcheck")]
@@ -298,8 +310,12 @@ pub struct DriverData {
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct InspectContainerHostConfig {
+    #[serde(rename = "Annotations")]
+    pub annotations: HashMap<String, String>,
     #[serde(rename = "AutoRemove")]
     pub auto_remove: Option<bool>,
+    #[serde(rename = "AutoRemoveImage")]
+    pub auto_remove_image: Option<bool>,
     #[serde(rename = "Binds")]
     pub binds: Option<Vec<String>>,
     #[serde(rename = "BlkioDeviceReadBps")]
@@ -366,8 +382,12 @@ pub struct InspectContainerHostConfig {
     pub extra_hosts: Option<Vec<String>>,
     #[serde(rename = "GroupAdd")]
     pub group_add: Option<Vec<String>>,
+    #[serde(rename = "IDMappings")]
+    pub id_mappings: Option<HashMap<String, Vec<String>>>,
     #[serde(rename = "Init")]
     pub init: Option<bool>,
+    #[serde(rename = "IntelRdtClosId")]
+    pub intel_rdt_clos_id: Option<String>,
     #[serde(rename = "IOMaximumBandwidth")]
     pub io_maximum_bandwidth: Option<u64>,
     #[serde(rename = "IOMaximumIOps")]
@@ -536,7 +556,7 @@ pub struct InspectAdditionalNetwork {
     #[serde(rename = "Aliases")]
     pub aliases: Option<Vec<String>>,
     #[serde(rename = "DriverOpts")]
-    pub driver_opts: Option<String>,
+    pub driver_opts: Option<HashMap<String, String>>,
     #[serde(rename = "EndpointID")]
     pub endpoint_id: Option<String>,
     #[serde(rename = "Gateway")]
@@ -612,6 +632,8 @@ pub struct InspectContainerState {
     pub started_at: Option<String>,
     #[serde(rename = "Status")]
     pub status: Option<String>,
+    #[serde(rename = "StoppedByUser")]
+    pub stopped_by_user: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)] //Eq,

@@ -12,6 +12,8 @@ pub struct CreatePodResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct InspectPodResponse {
+    pub blkio_weight: Option<u64>,
+    pub blkio_weight_device: Option<Vec<InspectBlkioThrottleDevice>>,
     #[serde(rename = "CgroupParent")]
     pub c_group_parent: Option<String>,
     #[serde(rename = "CgroupPath")]
@@ -20,7 +22,9 @@ pub struct InspectPodResponse {
     pub containers: Option<Vec<InspectPodContainerInfo>>,
     pub cpu_period: Option<u64>,
     pub cpu_quota: Option<i64>,
-    pub cpusets_cpu: Option<String>,
+    pub cpu_shares: Option<i64>,
+    pub cpusets_cpus: Option<String>,
+    pub cpusets_mems: Option<String>,
     #[serde(rename = "CreateCgroup")]
     pub create_cgoup: Option<bool>,
     #[serde(rename = "CreateCommand")]
@@ -30,6 +34,7 @@ pub struct InspectPodResponse {
     #[serde(rename = "CreateInfra")]
     pub create_infra: Option<bool>,
     pub device_read_bps: Option<InspectBlkioThrottleDevice>,
+    pub device_write_bps: Option<InspectBlkioThrottleDevice>,
     pub devices: Option<Vec<InspectDevice>>,
     #[serde(rename = "ExitPolicy")]
     pub exit_policy: Option<String>,
@@ -43,6 +48,9 @@ pub struct InspectPodResponse {
     pub infra_container_id: Option<String>,
     #[serde(rename = "Labels")]
     pub labels: Option<HashMap<String, String>>,
+    #[serde(rename = "LockNumber")]
+    pub lock_number: Option<u32>,
+    pub memory_limit: Option<u64>,
     pub mounts: Option<Vec<InspectMount>>,
     #[serde(rename = "Name")]
     pub name: Option<String>,
@@ -50,6 +58,8 @@ pub struct InspectPodResponse {
     pub namespace: Option<String>,
     #[serde(rename = "NumContainers")]
     pub num_containers: Option<u64>,
+    #[serde(rename = "RestartPolicy")]
+    pub restart_policy: Option<String>,
     pub security_opt: Option<Vec<String>>,
     #[serde(rename = "SharedNamespaces")]
     pub shared_namespaces: Vec<String>,
@@ -83,7 +93,7 @@ pub struct InspectDevice {
 pub struct InspectPodInfraConfig {
     pub cpu_period: Option<u64>,
     pub cpu_quota: Option<i64>,
-    pub spuset_cpus: Option<String>,
+    pub cpuset_cpus: Option<String>,
     #[serde(rename = "DNSOption")]
     pub dns_option: Option<Vec<String>>,
     #[serde(rename = "DNSSearch")]
@@ -186,6 +196,8 @@ pub struct ListPodContainer {
     pub id: Option<String>,
     #[serde(rename = "Names")]
     pub names: Option<String>,
+    #[serde(rename = "RestartCount")]
+    pub restart_count: Option<u64>,
     #[serde(rename = "Status")]
     pub status: Option<String>,
 }

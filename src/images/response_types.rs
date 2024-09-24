@@ -70,6 +70,8 @@ pub struct InspectImageResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ImageConfig {
+    #[serde(rename = "ArgsEscaped")]
+    pub args_escaped: Option<bool>,
     #[serde(rename = "Cmd")]
     pub cmd: Option<Vec<String>>,
     #[serde(rename = "Entrypoint")]
@@ -119,6 +121,8 @@ pub struct ImportImageResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ListImagesResponseEntry {
+    #[serde(rename = "Arch")]
+    pub arch: Option<String>,
     #[serde(rename = "ConfigDigest")]
     pub config_digest: Option<String>,
     #[serde(rename = "Containers")]
@@ -133,6 +137,8 @@ pub struct ListImagesResponseEntry {
     pub history: Option<Vec<String>>,
     #[serde(rename = "Id")]
     pub id: Option<String>,
+    #[serde(rename = "IsManifestList")]
+    pub is_manifest_list: Option<bool>,
     #[serde(rename = "Labels")]
     pub labels: Option<HashMap<String, String>>,
     #[serde(rename = "Names")]

@@ -14,6 +14,8 @@ pub struct GetInfoResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct NetDNS {
     pub package: Option<String>,
+    pub path: Option<String>,
+    pub version: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -49,6 +51,7 @@ pub struct HostInfo {
     pub database_backend: Option<String>,
     pub distribution: Option<DistributionInfo>,
     pub event_logger: Option<String>,
+    pub free_locks: Option<i64>,
     pub hostname: Option<String>,
     pub id_mappings: Option<IdMappings>,
     pub kernel: Option<String>,
@@ -57,8 +60,10 @@ pub struct HostInfo {
     pub mem_free: Option<i64>,
     pub mem_total: Option<i64>,
     pub network_backend: Option<String>,
+    pub network_backend_info: Option<NetworkBackendInfo>,
     pub oci_runtime: Option<OciRuntime>,
     pub os: Option<String>,
+    pub pasta: Option<Pasta>,
     pub remote_socket: Option<RemoteSocket>,
     pub rootless_network_cmd: Option<String>,
     pub runtime_info: Option<HashMap<String, String>>,
@@ -68,9 +73,6 @@ pub struct HostInfo {
     pub swap_free: Option<i64>,
     pub swap_total: Option<i64>,
     pub uptime: Option<String>,
-    pub free_locks: Option<i64>,
-    pub network_backend_info: Option<NetworkBackendInfo>,
-    pub pasta: Option<Pasta>,
     pub variant: Option<String>,
 }
 
@@ -213,6 +215,7 @@ pub struct Version {
     pub os: Option<String>,
     pub os_arch: Option<String>,
     pub version: Option<String>,
+    pub index: Option<i64>,
 }
 
 // Info taken from https://github.com/containers/podman/blob/69085570f7ebbb3768e963e2a6a31d7bb9b4ca16/libpod/info.go#L265-L281
@@ -283,9 +286,18 @@ pub struct DfContainer {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
+pub struct DfVolume {
+    pub Links: u64,
+    pub ReclaimableSize: u64,
+    pub Size: u64,
+    pub VolumeName: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+#[serde(deny_unknown_fields)]
 pub struct DfResponse {
     pub ImagesSize: u64,
     pub Images: Vec<DfImage>,
     pub Containers: Vec<DfContainer>,
-    pub Volumes: Vec<String>,
+    pub Volumes: Vec<DfVolume>,
 }

@@ -12,6 +12,46 @@ use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use std::collections::HashMap;
 use std::convert::TryFrom;
+use crate::system::response_types::IdMap;
+
+#[skip_serializing_none]
+#[cfg_attr(feature = "builder", derive(Builder))]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, Eq, PartialEq)]
+#[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
+pub struct AutoUserNSOpts {
+    #[serde(rename = "AdditionalGIDMappings")]
+    pub additional_gid_mappings: Option<Vec<IdMap>>,
+    #[serde(rename = "AdditionalUIDMappings")]
+    pub additional_uid_mappings: Option<Vec<IdMap>>,
+    #[serde(rename = "GroupFile")]
+    pub group_file: Option<String>,
+    #[serde(rename = "InitialSize")]
+    pub initial_size: Option<u32>,
+    #[serde(rename = "PasswdFile")]
+    pub passwd_file: Option<String>,
+    #[serde(rename = "Size")]
+    pub size: Option<u32>,
+}
+#[skip_serializing_none]
+#[cfg_attr(feature = "builder", derive(Builder))]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, Eq, PartialEq)]
+#[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
+pub struct IdMappings {
+    #[serde(rename = "AutoUserNs")]
+    pub auto_user_ns: Option<bool>,
+    #[serde(rename = "AutoUserNsOpts")]
+    pub auto_user_ns_opts: Option<AutoUserNSOpts>,
+    #[serde(rename = "GIDMap")]
+    pub gid_map: Option<Vec<IdMap>>,
+    #[serde(rename = "HostGIDMapping")]
+    pub host_gid_map: Option<bool>,
+    #[serde(rename = "HostUIDMapping")]
+    pub host_uid_map: Option<bool>,
+    #[serde(rename = "UIDMap")]
+    pub uid_map: Option<Vec<IdMap>>,
+}
+
+
 
 #[skip_serializing_none]
 #[cfg_attr(feature = "builder", derive(Builder))]
@@ -19,17 +59,22 @@ use std::convert::TryFrom;
 #[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
 pub struct CreatePodParameter {
     pub cgroup_parent: Option<String>,
+    pub cni_networks: Option<Vec<String>>,
     pub cpu_period: Option<i64>,
     pub cpu_quota: Option<i64>,
     pub dns_option: Option<Vec<String>>,
     pub dns_search: Option<Vec<String>>,
     pub dns_server: Option<String>,
+    pub exit_policy: Option<String>,
     pub hostadd: Option<Vec<String>>,
     pub hostname: Option<String>,
+    pub idmappings: IdMappings,
     pub image_volumes: Option<ImageVolume>,
     pub infra_command: Option<Vec<String>>,
     pub infra_conmon_pid_file: Option<String>,
     pub infra_image: Option<String>,
+    pub infra_name: Option<String>,
+    pub ipcns: Option<Namespace>,
     pub labels: Option<HashMap<String, String>>,
     pub mounts: Option<Vec<Mount>>,
     pub name: Option<String>,
@@ -46,12 +91,20 @@ pub struct CreatePodParameter {
     pub pod_devices: Option<Vec<String>>,
     pub portmappings: Option<Vec<PortMapping>>,
     pub resource_limits: Option<LinuxResources>,
+    pub restart_policy: Option<String>,
+    pub restart_tries: Option<u64>,
     pub security_opt: Option<Vec<String>>,
+    #[serde(rename = "serviceContainerID")]
+    pub service_container_id: Option<String>,
+    pub share_parent: Option<bool>,
     pub shared_namespaces: Option<Vec<String>>,
+    pub shm_size: Option<i64>,
+    pub shm_size_systemd: Option<i64>,
     pub sysctl: Option<HashMap<String, String>>,
     #[serde(rename = "ThrottleReadBpsDevice")]
     pub throttle_read_bps_device: Option<HashMap<String, LinuxThrottleDevice>>,
     pub userns: Option<Namespace>,
+    pub ustns: Option<Namespace>,
     pub volumes: Option<Vec<NamedVolume>>,
     pub volumes_from: Option<Vec<String>>,
 }

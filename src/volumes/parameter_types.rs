@@ -16,6 +16,10 @@ use std::convert::TryFrom;
 pub struct CreateVolumeParameter {
     #[serde(rename = "Driver")]
     pub driver: Option<String>,
+    #[serde(rename = "IgnoreIfExists")]
+    pub ignore_if_exists: Option<bool>,
+    #[serde(rename = "Label")]
+    pub label: Option<HashMap<String, String>>,
     #[serde(rename = "Labels")]
     pub labels: Option<HashMap<String, String>>,
     #[serde(rename = "Name")]
@@ -31,6 +35,8 @@ impl ExampleValues for CreateVolumeParameter {
         label.insert(String::from("example"), String::from("yes"));
         Self {
             driver: Some(String::from("local")),
+            ignore_if_exists: None,
+            label: None,
             labels: Some(label),
             volume_name: Some(String::from("CreateVolumeParameter")),
             options: None,

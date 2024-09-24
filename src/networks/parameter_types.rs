@@ -103,8 +103,10 @@ pub struct CreateNetworkParameter {
     pub ipv6_enabled: Option<bool>,
     pub labels: Option<HashMap<String, String>>,
     pub name: Option<String>,
+    pub network_dns_servers: Option<Vec<String>>,
     pub network_interface: Option<String>,
     pub options: Option<HashMap<String, String>>,
+    pub routes: Option<Vec<Route>>,
     pub subnets: Option<Vec<Subnet>>,
 }
 
@@ -121,11 +123,24 @@ impl ExampleValues for CreateNetworkParameter {
             ipv6_enabled: None,
             labels: None,
             name: Some("CreateNetworkParameter".to_owned()),
+            network_dns_servers: None,
             network_interface: None,
             options: None,
+            routes: None,
             subnets: None,
         }
     }
+}
+
+#[skip_serializing_none]
+#[cfg_attr(feature = "builder", derive(Builder))]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, Eq, PartialEq)]
+#[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
+#[serde(deny_unknown_fields)]
+pub struct Route {
+    pub destination: Option<String>,
+    pub gateway: Option<String>,
+    pub metric: Option<u64>,
 }
 
 // also used in InspectNetworkResponse

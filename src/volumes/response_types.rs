@@ -16,6 +16,8 @@ pub struct InspectVolumeResponse {
     pub gid: Option<i64>,
     #[serde(rename = "Labels")]
     pub labels: Option<HashMap<String, String>>,
+    #[serde(rename = "LockNumber")]
+    pub lock_number: Option<i64>,
     #[serde(rename = "MountCount")]
     pub mound_count: Option<u64>,
     #[serde(rename = "Mountpoint")]
@@ -32,6 +34,10 @@ pub struct InspectVolumeResponse {
     pub scope: Option<String>,
     #[serde(rename = "Status")]
     pub status: Option<HashMap<String, String>>,
+    #[serde(rename = "StorageID")]
+    pub storage_id: Option<String>,
+    #[serde(rename = "Timeout")]
+    pub timeout: Option<i64>,
     #[serde(rename = "UID")]
     pub uid: Option<i64>,
 }
