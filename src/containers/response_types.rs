@@ -687,7 +687,7 @@ pub struct ContainerStatsResponseInner {
     #[serde(rename = "UpTime")]
     pub up_time: Option<u64>,
     #[serde(rename = "Network")]
-    pub network: Option<HashMap<String, HashMap<String, u64>>>
+    pub network: Option<HashMap<String, HashMap<String, u64>>>,
 }
 
 pub type PruneContainerResponseEntry = ErrIdSizeResponse;

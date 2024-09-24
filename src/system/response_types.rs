@@ -260,44 +260,69 @@ pub struct EventActor {
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DfImage {
-    pub Repository: String,
-    pub Tag: String,
-    pub ImageID: String,
-    pub Created: String,
-    pub Size: u64,
-    pub SharedSize: u64,
-    pub UniqueSize: u64,
-    pub Containers: u64,
+    #[serde(rename = "Repository")]
+    pub repository: String,
+    #[serde(rename = "Tag")]
+    pub tag: String,
+    #[serde(rename = "ImageID")]
+    pub image_id: String,
+    #[serde(rename = "Created")]
+    pub created: String,
+    #[serde(rename = "Size")]
+    pub size: u64,
+    #[serde(rename = "SharedSize")]
+    pub shared_size: u64,
+    #[serde(rename = "UniqueSize")]
+    pub inique_size: u64,
+    #[serde(rename = "Containers")]
+    pub containers: u64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DfContainer {
-    pub ContainerID: String,
-    pub Image: String,
-    pub Command: Vec<String>,
-    pub LocalVolumes: u64,
-    pub Size: u64,
-    pub RWSize: u64,
-    pub Created: String,
-    pub Status: String,
-    pub Names: String,
+    #[serde(rename = "ContainerID")]
+    pub container_id: String,
+    #[serde(rename = "Image")]
+    pub image: String,
+    #[serde(rename = "Command")]
+    pub command: Vec<String>,
+    #[serde(rename = "LocalVolumes")]
+    pub local_volumes: u64,
+    #[serde(rename = "Size")]
+    pub size: u64,
+    #[serde(rename = "RWSize")]
+    pub rw_size: u64,
+    #[serde(rename = "Created")]
+    pub created: String,
+    #[serde(rename = "Status")]
+    pub status: String,
+    #[serde(rename = "Names")]
+    pub names: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DfVolume {
-    pub Links: u64,
-    pub ReclaimableSize: u64,
-    pub Size: u64,
-    pub VolumeName: String,
+    #[serde(rename = "Links")]
+    pub links: u64,
+    #[serde(rename = "ReclaimableSize")]
+    pub reclaimable_size: u64,
+    #[serde(rename = "Size")]
+    pub size: u64,
+    #[serde(rename = "VolumeName")]
+    pub volume_name: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DfResponse {
-    pub ImagesSize: u64,
-    pub Images: Vec<DfImage>,
-    pub Containers: Vec<DfContainer>,
-    pub Volumes: Vec<DfVolume>,
+    #[serde(rename = "ImagesSize")]
+    pub images_size: u64,
+    #[serde(rename = "Images")]
+    pub images: Vec<DfImage>,
+    #[serde(rename = "Containers")]
+    pub containers: Vec<DfContainer>,
+    #[serde(rename = "Volumes")]
+    pub volumes: Vec<DfVolume>,
 }

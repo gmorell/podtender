@@ -5,6 +5,7 @@ use crate::containers::parameter_types::{
 use crate::error::PodtenderError;
 #[cfg(any(test, feature = "examples"))]
 use crate::example_values_trait::ExampleValues;
+use crate::system::response_types::IdMap;
 use crate::utils;
 #[cfg(feature = "builder")]
 use derive_builder::Builder;
@@ -12,7 +13,6 @@ use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
 use std::collections::HashMap;
 use std::convert::TryFrom;
-use crate::system::response_types::IdMap;
 
 #[skip_serializing_none]
 #[cfg_attr(feature = "builder", derive(Builder))]
@@ -50,8 +50,6 @@ pub struct IdMappings {
     #[serde(rename = "UIDMap")]
     pub uid_map: Option<Vec<IdMap>>,
 }
-
-
 
 #[skip_serializing_none]
 #[cfg_attr(feature = "builder", derive(Builder))]

@@ -10,6 +10,10 @@ use serde_with::skip_serializing_none;
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
+#[skip_serializing_none]
+#[cfg_attr(feature = "builder", derive(Builder))]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, Eq, PartialEq)]
+#[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
 pub struct IntelRdt {
     #[serde(rename = "closID")]
     pub closid: Option<String>,
@@ -23,6 +27,10 @@ pub struct IntelRdt {
     pub mem_bw_schema: Option<String>,
 }
 
+#[skip_serializing_none]
+#[cfg_attr(feature = "builder", derive(Builder))]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, Eq, PartialEq)]
+#[cfg_attr(feature = "builder", builder(default, setter(strip_option)))]
 pub struct StartupHealthConfig {
     #[serde(rename = "Interval")]
     pub interval: Option<u64>,
@@ -791,7 +799,7 @@ pub struct CheckpointContainerParameter {
     pub file_locks: Option<bool>,
     #[serde(rename = "ignoreRootFS")]
     pub ignore_root_fs: Option<bool>,
-    #[serde(rename= "ignoreVolumes")]
+    #[serde(rename = "ignoreVolumes")]
     pub ignore_volumes: Option<bool>,
     pub keep: Option<bool>,
     #[serde(rename = "leaveRunning")]

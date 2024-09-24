@@ -2,6 +2,15 @@
 ### Added: -
 
 ### Changed:
+* support podman version 5.0.0
+* update dependencies
+* fmt / clean warnings from Df
+
+
+# v0.5.0:
+### Added: -
+
+### Changed:
 * support podman version 4.5.0
 * update dependencies
 

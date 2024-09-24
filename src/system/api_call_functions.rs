@@ -1,7 +1,7 @@
 use crate::error::Result;
 use crate::podman_service::PodmanService;
 use crate::system::parameter_types::{EventsParameter, EventsParameterStreamingQuery};
-use crate::system::response_types::{Event, GetInfoResponse, DfResponse};
+use crate::system::response_types::{DfResponse, Event, GetInfoResponse};
 use crate::utils;
 use futures::Stream;
 use std::convert::TryInto;
@@ -51,9 +51,7 @@ impl<'service> System<'service> {
         Ok(result_stream)
     }
 
-    pub async fn df(
-        &self
-    ) -> Result<DfResponse> {
+    pub async fn df(&self) -> Result<DfResponse> {
         let endpoint = utils::create_endpoint("/libpod/system/df");
 
         let response = self
